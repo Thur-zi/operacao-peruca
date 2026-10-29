@@ -184,7 +184,7 @@ button{font-family:inherit}
 <div id="endcard" class="screen endcard hidden">
   <div class="panel">
     <span class="tag">FIM</span>
-    <h2>TEJE<br>PRESO!</h2>
+    <h2 id="endTitle">TEJE<br>PRESO!</h2>
     <p id="endMsg"></p>
     <div class="stats"><div><b id="eDist">0</b><small>metros</small></div><div><b id="eCoins">0</b><small>moedas</small></div><div><b id="eScore">0</b><small>pontos</small></div></div>
     <p id="eBest" style="font-size:13px"></p>
@@ -490,6 +490,16 @@ function hintSprite(dir){if(!HINTM[dir]){const up=dir==='up';HINTM[dir]=new THRE
     x.fillStyle='#ffffff';x.beginPath();if(up){x.moveTo(64,22);x.lineTo(100,66);x.lineTo(76,66);x.lineTo(76,104);x.lineTo(52,104);x.lineTo(52,66);x.lineTo(28,66);}else{x.moveTo(64,106);x.lineTo(100,62);x.lineTo(76,62);x.lineTo(76,24);x.lineTo(52,24);x.lineTo(52,62);x.lineTo(28,62);}x.closePath();x.fill();
     x.font='28px '+FONT;x.textAlign='center';x.fillStyle='#ffffff';x.strokeStyle='#0b1d3a';x.lineWidth=7;const tx=up?'SOBE':'DESCE';x.strokeText(tx,64,150);x.fillText(tx,64,150);}),depthTest:true,fog:false});}
   const sp=new THREE.Sprite(HINTM[dir]);sp.scale.set(1.1,1.375,1);return sp;}
+function blimp(){const g=new THREE.Group();const b=new THREE.Mesh(SPH(1,20,14),mat('#d5dde6'));b.scale.set(1.05,1.0,2.4);b.position.y=0.2;g.add(b);
+  M(BOX(2.13,0.26,3.4),'#1e3a8a',0,0.2,0,g);M(BOX(2.14,0.08,3.4),'#ffd400',0,0.38,0,g);
+  const tp=textPlane('POLÍCIA FEDERAL','#1e3a8a','#ffd400',1.7,0.42);tp.rotation.x=-Math.PI/2;tp.position.set(0,1.21,0.1);g.add(tp);
+  M(BOX(0.6,0.35,1.0),'#37474f',0,-0.95,0.2,g);M(BOX(0.62,0.12,0.7),'#9be37a',0,-0.92,0.2,g);
+  M(BOX(0.06,0.9,0.8),'#1e3a8a',0,0.95,2.1,g);M(BOX(1.5,0.06,0.8),'#1e3a8a',0,0.2,2.1,g);M(SPH(0.09,8,6),blinkR,0,1.2,-1.6,g);return g;}
+function heli(){const h=new THREE.Group();M(SPH(0.32,12,8),'#1f2b3d',0,0,0,h).scale.set(1,0.85,1.5);M(BOX(0.08,0.08,0.8),'#1f2b3d',0,0.05,0.75,h);M(BOX(0.04,0.3,0.2),'#ffd400',0,0.15,1.12,h);M(BOX(0.2,0.12,0.1),'#9be37a',0,0,-0.46,h);
+  const r=grp(h);r.position.y=0.32;M(BOX(1.4,0.03,0.08),'#333333',0,0,0,r);M(BOX(0.08,0.03,1.4),'#333333',0,0,0,r);h.userData.r=r;return h;}
+function bannerCopters(){const g=new THREE.Group(),rot=[];[-1.15,1.15].forEach(x=>{const h=heli();h.position.set(x,3.45,0);g.add(h);rot.push(h.userData.r);M(BOX(0.03,1.15,0.03),'#333333',x*0.98,2.85,0,g);});
+  const tp=textPlane(pick(['PROCURA-SE','PARE!','FUJÃO','CADÊ O PASSAPORTE?']),'#d32f2f','#ffffff',2.4,1.2);tp.position.set(0,1.65,0);g.add(tp);
+  M(BOX(2.5,0.08,0.07),'#6d4c41',0,2.28,0,g);M(BOX(2.5,0.08,0.07),'#6d4c41',0,1.02,0,g);g.userData.rotors=rot;return g;}
 function birds(){const g=new THREE.Group(),wings=[];for(let i=0;i<7;i++){const b=grp(g);b.position.set(rand(-0.9,0.9),-0.6+i*0.27+rand(-0.08,0.08),rand(-0.5,0.5));b.scale.setScalar(1.25);M(SPH(0.16,8,6),'#ffffff',0,0,0,b).scale.set(1,0.8,1.7);M(CONE(0.06,0.18,6),'#ffb300',0,0,0.32,b).rotation.x=Math.PI/2;[-1,1].forEach(s=>{const p=grp(b);p.position.x=s*0.1;M(BOX(0.55,0.03,0.22),'#e9eef3',s*0.28,0,0,p);wings.push({p,s,ph:i});});}g.userData.wings=wings;const h=hintSprite('up');h.position.set(0,2.3,0);g.add(h);g.userData.hint=h;return g;}
 function highSign(text,bg,fg){const g=new THREE.Group();[-1.12,1.12].forEach(x=>M(BOX(0.1,3.3,0.1),'#8d969e',x,1.65,0,g));M(BOX(2.34,1.0,0.12),'#20262d',0,2.05,0,g);const tp=textPlane(text,bg,fg,2.2,0.86);tp.position.set(0,2.05,0.065);g.add(tp);return g;}
 function flatCloud(){const g=new THREE.Group();[[-0.9,1.1],[0,1.0],[0.9,1.1],[-0.5,2.0],[0.5,2.1],[-1,2.9],[0.1,3.1],[1,2.8],[-0.4,0.6],[0.5,0.55]].forEach(([x,y],i)=>M(SPH(i>7?0.5:0.75,12,8),i%2?'#4f5765':'#5f6876',x,y,rand(-0.3,0.3),g).scale.set(1,0.85,1));const h=hintSprite('down');h.position.set(0,-0.75,0.4);g.add(h);g.userData.hint=h;const bolt=grp(g);bolt.position.set(0,0.2,0.7);M(BOX(0.08,0.5,0.05),boltMat,0,0,0,bolt).rotation.z=0.4;g.userData.bolt=bolt;return g;}
@@ -643,11 +653,11 @@ const DIMS={block:{w:1.0,y0:0,y1:2.3},low:{w:1.05,y0:0,y1:0.95},high:{w:1.1,y0:1
 function makeObs(kind,th){
   if(kind==='block'){if(th==='br')return{g:car(Math.random()<0.6?'police':'taxi'),dz:1.95};if(th==='ar')return{g:bus(),dz:3.0};if(th==='ap')return{g:bagCart(),dz:1.6};
     return Math.random()<(th==='fl1'?0.25:0.5)?{g:balloon(),dz:1.2,y0:-3,y1:5}:{g:stormTower(),dz:1.2,y0:-3,y1:5};}
-  if(kind==='low'){if(th==='br')return{g:Math.random()<0.5?barrier('#e53935','#ffffff'):cones(),dz:0.35};if(th==='ar')return{g:Math.random()<0.5?barrier('#74acdf','#ffffff'):mate(),dz:0.5};if(th==='ap')return{g:suitcaseLow(),dz:0.5};return{g:birds(),dz:0.7,y0:-0.9,y1:1.3};}
+  if(kind==='low'){if(th==='br')return{g:Math.random()<0.5?barrier('#e53935','#ffffff'):cones(),dz:0.35};if(th==='ar')return{g:Math.random()<0.5?barrier('#74acdf','#ffffff'):mate(),dz:0.5};if(th==='ap')return{g:suitcaseLow(),dz:0.5};return{g:blimp(),dz:2.2,y0:-1.3,y1:1.3};}
   if(th==='br')return{g:highSign('BLITZ','#d32f2f','#ffffff'),dz:0.2};
   if(th==='ar')return{g:highSign(pick(['¡CHE!','TANGO','DULCE DE LECHE']),'#74acdf','#ffffff'),dz:0.2};
   if(th==='ap')return{g:highSign(pick(['RAIO-X','SEGURANÇA']),'#ffd400','#111111'),dz:0.2};
-  return{g:flatCloud(),dz:1.0,y0:0.25,y1:4.2};}
+  return{g:bannerCopters(),dz:0.4,y0:0.55,y1:4.2};}
 function addObstacle(kind,lane,d){const th=themeAt(d),o=makeObs(kind,th),dm=DIMS[kind];addTo(obsA,o.g,lane*LANE,0,d,{kind,w:dm.w,dz:o.dz,y0:o.y0!==undefined?o.y0:dm.y0,y1:o.y1||dm.y1,kill:o.dz+12});}
 function addCoin(x,y,d){addTo(coinA,coinMesh(coinKind(themeAt(d))),x,y,d,{ph:d*0.3});}
 function coinLine(lane,d0,n,fy){for(let i=0;i<n;i++)addCoin(lane*LANE,fy(i,n),d0+i*2.8);}
@@ -781,7 +791,7 @@ function setMode(m){mode=m;player.root.visible=m==='run';blob.visible=m==='run';
   scene.fog.near=m==='fly'?55:40;scene.fog.far=m==='fly'?270:170;}
 function takeoff(){if(mode==='fly'){banner('RUMO A ORLANDO','Desvie das nuvens e dos pássaros');return;}
   state='trans';Fade.to(1,0.45,()=>{endPowers(true);setMode('fly');for(let i=propA.length-1;i>=0;i--)if(propA[i].d<dist+30&&!isFly(themeAt(propA[i].d))){scroller.remove(propA[i].g);propA.splice(i,1);}
-    clearArr(obsA);cp[3]=coins;P.y=0;P.vy=0;P.jumping=false;P.slide=0;camSnap=true;state='play';Fade.to(0,0.6);banner('DECOLAGEM!','↑ sobe nos pássaros · ↓ desce nas nuvens');Snd.power();});}
+    clearArr(obsA);cp[3]=coins;P.y=0;P.vy=0;P.jumping=false;P.slide=0;camSnap=true;state='play';Fade.to(0,0.6);banner('DECOLAGEM!','Por cima do dirigível, por baixo da faixa');Snd.power();});}
 
 // ---------- powers
 function startJet(){if(P.horse>0)endHorse();P.jet=7.5;P.jumping=false;P.vy=0;P.slide=0;jetObj.root.visible=true;jetObj.root.scale.setScalar(0.62);jetLeave=0;headClone(jetObj.slot);player.root.visible=false;blob.visible=false;
@@ -824,7 +834,7 @@ function playUpdate(dt){
   cleanArr(obsA,16);cleanArr(coinA,12);cleanArr(pickA,12);cleanArr(propA,16);
   for(const tr of TRIG)if(!tr.done&&dist>=tr.d){tr.done=true;tr.f();if(state!=='play')return;}
   const th=themeAt(dist+40);setSky(th);
-  if(mode==='fly')for(const o of obsA){const oz=dist-o.d;if(oz<-34&&oz>-60&&(o.kind==='low'||o.kind==='high')&&!tut[o.kind]){tut[o.kind]=1;if(o.kind==='low')banner('PÁSSAROS!','Deslize pra CIMA ↑ e passe por cima');else banner('TEMPESTADE!','Deslize pra BAIXO ↓ e passe por baixo');break;}}
+  if(mode==='fly')for(const o of obsA){const oz=dist-o.d;if(oz<-34&&oz>-60&&(o.kind==='low'||o.kind==='high')&&!tut[o.kind]){tut[o.kind]=1;if(o.kind==='low')banner('DIRIGÍVEL DA PF!','Passe por cima: deslize pra cima');else banner('FAIXA DOS HELICÓPTEROS!','Passe por baixo: deslize pra baixo');break;}}
   const blink=P.inv>0&&Math.floor(P.inv*12)%2===1;
   if(mode==='run'){const ry=P.horse>0?1.13+horse.b.position.y:0;player.root.visible=P.jet<=0&&!blink;player.root.position.set(P.x,P.y+P.alt+ry,0);player.root.rotation.set(0,0,(P.x-P.lane*LANE)*0.06);
     animPerson(player,P.horse>0?'ride':P.jet<=0&&P.alt===0&&P.jumping&&P.y>4?'sky':P.jumping?'jump':P.slide>0?'slide':'run',t,dt);
@@ -846,12 +856,21 @@ let endBuilt=false;const E={t:0,f:{},cp:new THREE.Vector3(),cl:new THREE.Vector3
 const MILEI={skin:'#efc4a1',hair:'#3b2414',hairStyle:'milei',jacket:'#151515',pants:'#1c1c1c',noSuit:true,collar:'#151515',brow:'#2a1a10',browThick:true,browTilt:0.28,headY:1.1,shout:true};
 const MORAES={skin:'#e8b996',hair:'#2a2a2a',hairStyle:'bald',jacket:'#111114',pants:'#111114',noSuit:true,toga:true,brow:'#151515',browTilt:0.22,browThick:true};
 const PAI_LINES=[['m','Ué, 01?! Você também?'],['p','Pai... o Trump era o Xandão disfarçado!'],['m','Eu sabia! Ninguém tem aquele laranja natural.'],['m','Pelo menos trouxe o chocolate?'],['p','Até isso o Xandão pegou.'],['m','E o jatinho da Master?'],['p','Apreendido também.'],['m','E a peruca?'],['p','Virou prova no inquérito.'],['m','Talkey... senta aí. Tem dominó.']];
+const XLINES=[['x','Surpresa! Era eu o tempo todo.'],['p','XANDÃO?! E o topete laranja?!'],['x','Peruca. Igual à sua.']];
 const JAIL={
   flavio:{mate:'jair',caught:'Mas... e o jatinho?!',l:PAI_LINES,msg:'Flávio foi preso pelo Xandão disfarçado de Trump e reencontrou o pai na cela.'},
   flavio_us:{mate:'jair',caught:'Mas a faixa é americana!',l:[['m','Ué, 01?! Que faixa é essa?'],['p','Made in USA, pai. O Trump era o Xandão!'],['m','Eu sabia! Ninguém tem aquele laranja natural.'],['m','Pelo menos trouxe o chocolate?'],['p','Até isso o Xandão pegou.'],['m','E a faixa?'],['p','Essa ele deixou. Disse que é prova.'],['m','Talkey... senta aí. Tem dominó.']],msg:'Flávio foi preso pelo Xandão disfarçado de Trump, de faixa americana e tudo, e reencontrou o pai na cela.'},
-  jair:{mate:'flavio',caught:'Talkey... perdi.',l:[['m','Pai?! O senhor também?'],['p','O Trump era o Xandão, 01!'],['m','Eu falei que aquele topete era suspeito!'],['p','Pelo menos trouxe o chocolate?'],['m','Até isso o Xandão pegou.'],['p','E o jatinho?'],['m','Apreendido também.'],['p','Talkey... então joga dominó comigo.']],msg:'Jair foi preso pelo Xandão disfarçado de Trump e encontrou o 01 na cela.'},
-  edu:{mate:'jair',caught:'Mas eu tenho visto americano!',l:[['m','Eduardo?! Você não morava nos EUA?'],['p','Morava. O Trump era o Xandão, pai!'],['m','Eu sabia! Ninguém tem aquele laranja natural.'],['m','Pelo menos trouxe o chocolate?'],['p','Até isso o Xandão pegou.'],['m','E o visto americano?'],['p','Cancelado também.'],['m','Talkey... senta aí. Tem dominó.']],msg:'Eduardo foi preso pelo Xandão disfarçado de Trump e reencontrou o pai na cela.'},
-  lula:{mate:'jair',caught:'Companheiro, eu sou o presidente!',l:[['m','VOCÊ?! Aqui na minha cela?!'],['p','Companheiro, o Trump era o Xandão!'],['m','Até que enfim a gente concorda em alguma coisa.'],['m','Pelo menos trouxe o chocolate?'],['p','Até isso o Xandão pegou.'],['m','E a picanha?'],['p','Também.'],['m','...Joga dominó?']],msg:'Lula foi preso pelo Xandão disfarçado de Trump e foi parar na cela do Jair.'},
+  jair:{mate:null,caught:'Talkey... de volta pra cela.',after:[['p','Somos grandes amigos, né, presidente?']],
+    x:[['x','Grande amigo, é? Surpresa!'],['p','XANDÃO?! De novo?!'],['x','Saudade de mim, capitão?']],
+    l:[['p','Sozinho de novo...'],['p','Nem o 01 veio me visitar.'],['p','Pelo menos tem dominó.'],['p','...Alguém aí trouxe chocolate?']],
+    msg:'Jair achou que ia encontrar o grande amigo Trump, mas era o Xandão. Voltou pra cadeia sozinho.'},
+  edu:{mate:'jair',caught:'Isso é perseguição internacional!',
+    arrest:[['p','Peraí! Eu já moro aqui, não posso ser preso!'],['x','Mora? Agora mora na cela 01.'],['p','Mas eu tenho visto americano!'],['x','Visto cancelado.']],
+    l:[['m','Eduardo?! Você não morava nos EUA?'],['p','Morava. O Trump era o Xandão, pai!'],['m','Eu sabia! Ninguém tem aquele laranja natural.'],['m','Pelo menos trouxe o chocolate?'],['p','Até isso o Xandão pegou.'],['m','E o visto americano?'],['p','Cancelado também.'],['m','Talkey... senta aí. Tem dominó.']],
+    msg:'Eduardo jurou que morava nos EUA, mas o Xandão prendeu mesmo assim. Reencontrou o pai na cela.'},
+  lula:{happy:true,
+    l:[['f','E agora, Eduardo?'],['e','Eu tinha visto americano...'],['f','Pelo menos trouxe o chocolate?'],['e','Até isso o Lula tomou.'],['p','Tá uma delícia, companheiro!'],['t','Tremendous chocolate!'],['f','...Joga dominó?']],
+    msg:'Lula tomou um cafezinho com o Trump e os dois prenderam o Flávio e o Eduardo. Final feliz (pro Lula).'},
 };
 function buildEndSet(){endBuilt=true;const S=E.set=grp(endGroup);
   const gm=new THREE.Mesh(PLANE(500,400),new THREE.MeshLambertMaterial({map:noiseTex('#5fb35f',['#56a856','#69bd69','#5aae5a'],900,3,[80,64])}));gm.rotation.x=-Math.PI/2;S.add(gm);
@@ -861,11 +880,18 @@ function buildEndSet(){endBuilt=true;const S=E.set=grp(endGroup);
   for(let i=0;i<16;i++){const tr=tree('#4caf50','#3e9a45');tr.position.set(rand(-60,60),0,rand(-35,-18));tr.scale.setScalar(rand(1.5,2.4));S.add(tr);}
   E.flags=[];[[-7.2,'us'],[-8.4,'br'],[0.8,'us']].forEach(([x,k])=>{const f=flagPole(k);f.position.set(x,0,0.9);S.add(f);E.flags.push(f);});
   const sg=new THREE.Group();[-2.4,2.4].forEach(x=>M(BOX(0.15,3,0.15),'#9e9e9e',x,1.5,0,sg));const tp=textPlane('WELCOME TO WASHINGTON','#1e3a8a','#ffffff',5.2,0.9);tp.position.set(0,2.6,0.02);sg.add(tp);M(BOX(5.4,1.05,0.06),'#ffffff',0,2.6,-0.03,sg);sg.position.set(-5.2,0,-1.5);S.add(sg);
-  E.trump=buildPerson(TRUMP);E.trump.root.position.set(-4.6,0,2.6);E.trump.root.rotation.y=-Math.PI/2;endGroup.add(E.trump.root);
+  E.trump=buildPerson(TRUMP);endGroup.add(E.trump.root);
   E.moraes=buildPerson(MORAES);E.moraes.root.position.set(-4.6,0,2.6);E.moraes.root.rotation.y=-Math.PI/2;endGroup.add(E.moraes.root);
-  E.agents=[0,1].map(()=>{const a=buildPerson(AGENT);a.root.rotation.y=-Math.PI/2;endGroup.add(a.root);return a;});
+  E.agents=[0,1].map(()=>{const a=buildPerson(AGENT);endGroup.add(a.root);return a;});
   E.stairs=new THREE.Group();for(let i=0;i<6;i++)M(BOX(1.0,0.12,0.4),'#cfd8dc',0,1.06-i*0.2,0.15+i*0.36,E.stairs);[-0.5,0.5].forEach(x=>{const r=M(BOX(0.05,0.05,2.4),'#90a4ae',x,1.5,1.05,E.stairs);r.rotation.x=0.5;});S.add(E.stairs);
   E.cuffs=new THREE.Group();[-0.24,0.24].forEach(x=>{const r=M(G('cuff',()=>new THREE.TorusGeometry(0.1,0.028,6,14)),'#b0b8c0',x,1.04,-0.43,E.cuffs);r.rotation.y=Math.PI/2;});M(BOX(0.38,0.03,0.03),'#9aa3ad',0,1.04,-0.43,E.cuffs);
+  E.cuffs2=E.cuffs.clone();E.cuffs3=E.cuffs.clone();
+  E.npcF=buildPerson(SKINS.find(s=>s.id==='flavio'));E.npcF.wig.visible=true;E.npcF.hair.visible=false;endGroup.add(E.npcF.root);
+  E.npcE=buildPerson(SKINS.find(s=>s.id==='edu'));endGroup.add(E.npcE.root);
+  E.cafe=new THREE.Group();M(CYL(0.5,0.5,0.06,20),'#f5f5f5',0,1.0,0,E.cafe);M(CYL(0.05,0.07,1.0,8),'#555555',0,0.5,0,E.cafe);M(CYL(0.3,0.3,0.04,12),'#555555',0,0.02,0,E.cafe);
+  [-0.28,0.28].forEach(x=>{M(CYL(0.08,0.06,0.13,10),'#ffffff',x,1.1,0,E.cafe);M(CYL(0.065,0.065,0.01,10),'#4e2a14',x,1.165,0,E.cafe);});
+  M(CYL(0.03,0.03,2.2,6),'#8d8d8d',0,2.1,0,E.cafe);M(CONE(1.5,0.5,12),'#e53935',0,3.3,0,E.cafe);
+  E.cafe.position.set(-3.92,0,2.6);E.cafe.visible=false;endGroup.add(E.cafe);
   buildJail();}
 function buildJail(){const J=E.jailSet=grp(endGroup);J.visible=false;
   M(BOX(12,0.1,10),'#6b6f76',0,-0.05,0,J);
@@ -883,25 +909,33 @@ function mateFor(id){if(!E.mates[id]){const cfg=Object.assign({},SKINS.find(s=>s
 function startEnding(){state='trans';Fade.to(1,0.6,()=>{setupEnding();state='ending';Fade.to(0,0.9);});}
 function setupEnding(){if(!endBuilt)buildEndSet();endPowers();world.visible=false;endGroup.visible=true;show('hud',false);blob.visible=false;
   setSky('end',true);scene.fog.near=60;scene.fog.far=340;
-  E.set.visible=true;E.jailSet.visible=false;Object.values(E.mates).forEach(m=>m.root.visible=false);
-  const tr=E.trump;tr.body.add(tr.head);tr.head.position.set(0,1.9,0);tr.head.rotation.set(0,0,0);tr.head.visible=true;tr.root.visible=true;E.moraes.root.visible=false;
-  E.agents.forEach((a,i)=>{a.root.visible=true;a.root.position.set(-6.6,0,i?1.6:1.0);});
-  if(E.cuffs.parent)E.cuffs.parent.remove(E.cuffs);
+  const sk=SKINS[skinIdx],J=JAIL[sk.id];E.happy=!!J.happy;E.moves=[];E.fireOn=false;
+  E.set.visible=true;E.jailSet.visible=false;E.cafe.visible=false;Object.values(E.mates).forEach(m=>m.root.visible=false);
+  const tr=E.trump;tr.body.add(tr.head);tr.head.position.set(0,1.9,0);tr.head.rotation.set(0,0,0);tr.head.visible=true;tr.root.visible=true;tr.root.position.set(-4.6,0,2.6);tr.root.rotation.set(0,-Math.PI/2,0);E.moraes.root.visible=false;
+  E.agents.forEach((a,i)=>{a.root.visible=true;a.root.position.set(-6.6,0,i?1.6:1.0);a.root.rotation.set(0,-Math.PI/2,0);a.mode='idle';});
+  [E.npcF,E.npcE].forEach(n=>{n.root.visible=false;n.mode='idle';});
+  [E.cuffs,E.cuffs2,E.cuffs3].forEach(c=>c.parent&&c.parent.remove(c));
+  player.mode='idle';tr.mode='idle';
   const pl=planeObj;endGroup.add(pl.root);pl.root.visible=true;pl.root.scale.setScalar(1.3);pl.root.rotation.set(0,Math.PI/2,0);pl.s.rotation.set(0,0,0);pl.gear.visible=true;pl.slot.visible=true;pl.root.position.set(70,18,0);pl.door.position.z=-1.25;
   if(player.wig.parent!==player.head){player.head.add(player.wig);player.wig.position.set(0,0,0);player.wig.rotation.set(0,0,0);}
   setWig(true);endGroup.add(player.root);player.root.visible=false;player.root.position.set(0,0,0);player.root.rotation.set(0,Math.PI,0);
-  E.doorX=4-1.625;E.stairs.position.set(E.doorX,0,0.75);E.stairs.scale.y=0.001;E.t=0;E.f={};E.wigV=null;E.maskV=null;E.mask=null;E.jail=false;E.mood='idle';E.cuffed=false;E.shot='two';E.fire=0;E.script=buildScript(SKINS[skinIdx],JAIL[SKINS[skinIdx].id]);show('btnSkip',true);
+  E.doorX=4-1.625;E.stairs.position.set(E.doorX,0,0.75);E.stairs.scale.y=0.001;E.t=0;E.f={};E.wigV=null;E.maskV=null;E.mask=null;E.jail=false;E.mood='idle';E.cuffed=false;E.shot='two';E.fire=0;
+  E.script=E.happy?buildHappyScript(sk,J):buildScript(sk,J);show('btnSkip',true);
   E.cp.set(-6,4.5,26);E.cl.set(40,8,0);camPos.copy(E.cp);camLook.copy(E.cl);}
 function setupJail(){E.jail=true;E.jt=E.t;const J=JAIL[SKINS[skinIdx].id];
-  E.set.visible=false;planeObj.root.visible=false;E.moraes.root.visible=false;E.agents.forEach(a=>a.root.visible=false);if(E.mask)E.mask.visible=false;player.wig.visible=false;E.jailSet.visible=true;
-  if(E.cuffs.parent)E.cuffs.parent.remove(E.cuffs);E.cuffed=false;E.faceCam=false;bubs.forEach(b=>b.el.remove());bubs.length=0;
-  E.mate=mateFor(J.mate);E.mate.root.visible=true;E.mate.root.position.set(-1.0,0,0.6);E.mate.root.rotation.set(0,-Math.PI/2-0.6,0);
-  player.root.position.set(3.3,0,0.6);player.root.rotation.set(0,Math.PI/2,0);E.door.position.x=2.4;
+  E.set.visible=false;planeObj.root.visible=false;E.moraes.root.visible=false;E.agents.forEach(a=>a.root.visible=false);if(E.mask)E.mask.visible=false;player.wig.visible=false;E.jailSet.visible=true;E.cafe.visible=false;
+  [E.cuffs,E.cuffs2,E.cuffs3].forEach(c=>c.parent&&c.parent.remove(c));E.cuffed=false;E.faceCam=false;E.fireOn=false;bubs.forEach(b=>b.el.remove());bubs.length=0;E.moves=[];
+  if(E.happy){E.mate=E.npcF;[E.npcF,E.npcE].forEach(n=>{n.root.visible=true;n.mode='idle';});
+    E.npcF.root.position.set(-1.0,0,0.6);E.npcF.root.rotation.set(0,-Math.PI/2-0.6,0);E.npcE.root.position.set(0.9,0,0.6);E.npcE.root.rotation.set(0,Math.PI/2+0.6,0);
+    player.root.position.set(-1.9,0,3.9);player.root.rotation.set(0,Math.PI-0.5,0);E.trump.root.visible=true;E.trump.root.position.set(1.9,0,3.9);E.trump.root.rotation.set(0,Math.PI+0.5,0);E.door.position.x=0;}
+  else{E.mate=J.mate?mateFor(J.mate):null;if(E.mate){E.mate.root.visible=true;E.mate.root.position.set(-1.0,0,0.6);E.mate.root.rotation.set(0,-Math.PI/2-0.6,0);}
+    E.trump.root.visible=false;player.root.position.set(3.3,0,0.6);player.root.rotation.set(0,Math.PI/2,0);E.door.position.x=2.4;}
   setSky('jail',true);scene.fog.near=30;scene.fog.far=90;
-  E.cp.set(0.3,2.1,portrait?9:7.4);E.cl.set(0.3,1.35,0.4);camPos.copy(E.cp);camLook.copy(E.cl);
-  let t=2.8;E.jscript=J.l.map(([w,txt])=>{const d=clamp(1.2+txt.length*0.055,2.2,3.6),s={t,w,txt,d};t+=d+0.15;return s;});
+  jailCam();camPos.copy(E.cp);camLook.copy(E.cl);
+  let t=E.happy?1.8:2.8;E.jscript=J.l.map(([w,txt])=>{const d=clamp(1.2+txt.length*0.055,2.2,3.6),s={t,w,txt,d};t+=d+0.15;return s;});
   E.jscript.push({t:t+0.1,fx:'fim'},{t:t+1.8,fx:'card'});
-  banner('MAIS TARDE...','Na cela da PF');Snd.stopMusic();}
+  banner('MAIS TARDE...',E.happy?'Flávio e Eduardo na cela da PF':'Na cela da PF');Snd.stopMusic();}
+function jailCam(){E.cp.set(0.3,E.happy?2.5:2.1,portrait?(E.happy?11.5:9):(E.happy?9.5:7.4));E.cl.set(0.3,state==='endcard'&&portrait?0.5:(E.happy?1.5:1.35),E.happy?1.6:0.4);E.ck=1.6;}
 const bubs=[];
 function say(anchor,text,dur,cls){bubs.filter(b=>b.anchor===anchor).forEach(b=>b.until=0);const el=document.createElement('div');el.className='bub '+(cls||'');el.innerHTML='<div></div>';el.firstChild.textContent=text;$('bubbles').appendChild(el);bubs.push({el,anchor,until:E.t+dur});Snd.tone(cls?520:700,0.06,'square',0.08);Snd.tone(cls?440:880,0.06,'square',0.08,null,0.07);}
 const tv=new THREE.Vector3();
@@ -914,24 +948,51 @@ function wigOff(){const w=player.wig;endGroup.attach(w);E.wigV=new THREE.Vector3
 function boom(){const h=E.trump.head;endGroup.attach(h);E.mask=h;E.maskV=new THREE.Vector3(-1.4,8,1.8);E.trump.root.visible=false;E.moraes.root.visible=true;
   emit(FX,-4.6,2.2,2.6,120,['#ffffff','#cfd8dc','#9e9e9e','#ffd400','#ff7043'],6,1.1,-1);emit(BIG,-4.6,2.0,2.6,50,['#ffffff','#ffd400','#ff7043'],7,0.6,0);
   Snd.boom();shake=0.8;Fade.v=0.9;fadeEl.style.opacity=0.9;Fade.to(0,0.45);banner('É O XANDÃO!','');E.mood='reveal';}
+function moveTo(u,x,z,dur,ry){E.moves=E.moves.filter(m=>m.u!==u);E.moves.push({u,sx:u.root.position.x,sz:u.root.position.z,x,z,t0:E.t,dur,ry});}
+function updActors(dt,T){for(const u of [player,E.trump,E.npcF,E.npcE,...E.agents]){if(!u.root.visible)continue;const m=E.moves.find(m=>m.u===u);let walking=false;
+  if(m){const k=clamp((E.t-m.t0)/m.dur,0,1);u.root.position.x=lerp(m.sx,m.x,k);u.root.position.z=lerp(m.sz,m.z,k);if(m.ry!==undefined)u.root.rotation.y=m.ry;walking=k<1;if(k>=1)E.moves.splice(E.moves.indexOf(m),1);}
+  animPerson(u,walking?'walk':(u.mode||'idle'),T+(u===E.trump?1:0),dt);}}
+const lineDur=txt=>clamp(1.4+txt.length*0.045,2.4,3.4);
 function buildScript(sk,J){let t=10.4;const L=[],PH=()=>player.head,TH=()=>E.trump.head,MH=()=>E.moraes.head;const add=(d,fn)=>{L.push({t,fn});t+=d;};
+  const line=(w,txt,sh)=>add(lineDur(txt)+0.2,()=>{if(sh)shot(w==='x'?'moraes':'player');if(w==='x')say(MH(),txt,lineDur(txt),'tr');else say(PH(),txt,lineDur(txt));});
   add(2.6,()=>{shot('two');say(PH(),sk.line,2.4);});
   add(2.8,()=>{say(TH(),'Welcome to America, my friend!',2.6,'tr');E.mood='cheer';Snd.fanfare();emit(FX,-3.9,6,2.6,220,CONF,4,3.5,-3);});
   add(2.8,()=>{shot('wide');say(PH(),'Consegui! Ninguém me reconheceu com essa peruca!',2.6);});
   add(2.8,()=>{E.mood='idle';wigOff();say(PH(),sk.reveal,2.6);});
+  (J.after||[]).forEach(([w,txt])=>line(w,txt,true));
   add(3.0,()=>{shot('trump');Snd.stopMusic();Snd.drone();E.mood='tense';say(TH(),'Eu sei exatamente quem você é...',2.8,'tr');});
   add(2.8,()=>say(TH(),'E você vai adorar a surpresa, '+sk.name.split(' ')[0]+'.',2.6,'tr'));
   add(2.6,()=>{shot('player');say(PH(),'Peraí... o senhor fala português?!',2.4);});
   add(1.8,()=>{shot('trumpX',true);E.mood='unmask';Snd.tension();});
   add(2.4,()=>{boom();shot('moraes',true);});
-  add(2.8,()=>say(MH(),'Surpresa! Era eu o tempo todo.',2.6,'tr'));
-  add(2.6,()=>{shot('player');say(PH(),'XANDÃO?! E o topete laranja?!',2.4);});
-  add(2.6,()=>{shot('moraes');say(MH(),'Peruca. Igual à sua.',2.4,'tr');});
+  (J.x||XLINES).forEach(([w,txt])=>line(w,txt,true));
   add(2.8,()=>{shot('two');E.mood='arrest';E.arrestT=E.t;say(MH(),'TEJE PRESO!',2.6,'tr');Snd.voice('teje-preso','Teje preso!');Snd.siren();});
+  (J.arrest||[]).forEach(([w,txt])=>line(w,txt,false));
   add(2.6,()=>{E.cuffed=true;player.body.add(E.cuffs);Snd.clang();say(PH(),J.caught,2.4);});
   add(0.1,()=>Fade.to(1,0.5,()=>{setupJail();Fade.to(0,0.7);}));
   return L;}
-const SHOTS={two:[[-3.6,2.5,9.2,7.6],[-3.6,1.3,2.6]],wide:[[-3.2,3.3,12.5,10.5],[-3.6,1.6,2.6]],trump:[[-3.0,2.1,5.2,4.9],[-4.55,1.95,2.6]],trumpX:[[-3.35,2.0,4.1,3.9],[-4.55,2.0,2.6]],moraes:[[-3.0,2.1,5.0,4.7],[-4.55,1.9,2.6]],player:[[-4.9,2.1,5.2,4.9],[-3.3,1.95,2.6]]};
+function buildHappyScript(sk,J){let t=10.4;const L=[],PH=()=>player.head,TH=()=>E.trump.head,FH=()=>E.npcF.head,EH=()=>E.npcE.head,tr=()=>E.trump;const add=(d,fn)=>{L.push({t,fn});t+=d;};
+  add(2.6,()=>{shot('two');say(PH(),sk.line,2.4);});
+  add(2.6,()=>{tr().mode='scratch';say(TH(),'Who are you?! 🤔',2.4,'tr');});
+  add(2.8,()=>{tr().mode='idle';wigOff();say(PH(),sk.reveal,2.6);});
+  add(3.0,()=>{shot('wide');tr().mode='cheer';player.mode='cheer';E.fireOn=true;say(TH(),'Lula! I like you! We have great chemistry!',2.8,'tr');Snd.fanfare();emit(FX,-3.9,6,2.6,220,CONF,4,3.5,-3);});
+  add(2.8,()=>{shot('two');tr().mode='idle';player.mode='idle';E.fireOn=false;say(PH(),'Bora tomar um cafezinho, companheiro?',2.6);});
+  add(2.4,()=>say(TH(),'Coffee? Tremendous idea!',2.2,'tr'));
+  add(1.4,()=>Fade.to(1,0.45,()=>{E.cafe.visible=true;E.wigV=null;player.wig.visible=false;shot('two',true);banner('CAFEZINHO','Casa Branca, 15h');Fade.to(0,0.6);}));
+  add(3.0,()=>say(TH(),'Brazilian coffee... the best coffee. Believe me!',2.8,'tr'));
+  add(2.6,()=>say(PH(),'E sem tarifa, viu, companheiro?',2.4));
+  add(2.6,()=>say(TH(),'Ok, ok... no tariff on coffee!',2.4,'tr'));
+  add(2.9,()=>{shot('wide');say(TH(),'Wait... who is that guy with the wig?',2.7,'tr');
+    E.npcF.root.visible=true;E.npcE.root.visible=true;E.npcF.root.position.set(4,0,1.3);E.npcE.root.position.set(5.2,0,1.3);E.npcF.root.rotation.y=E.npcE.root.rotation.y=Math.PI/2;moveTo(E.npcF,-1.7,1.3,2.6);moveTo(E.npcE,-0.6,1.3,2.6);});
+  add(2.6,()=>{shot('pair');say(FH(),'Psiu... ninguém vai me reconhecer!',2.4);});
+  add(2.6,()=>{shot('wide');player.mode='point';say(PH(),'É o Flávio de peruca! E o Eduardo!',2.4);});
+  add(2.6,()=>{tr().mode='point';say(TH(),'Secret Service! Get them!',2.4,'tr');Snd.siren();moveTo(E.agents[0],-2.6,1.6,1.5,-Math.PI/2);moveTo(E.agents[1],0.6,0.8,1.8,Math.PI/2);});
+  add(2.8,()=>{shot('pair');E.npcF.mode='scratch';E.npcE.mode='scratch';say(EH(),'Eu já moro aqui! Vocês não podem me prender!',2.6);});
+  add(2.6,()=>{shot('wide');say(TH(),"You're fired! I mean... arrested!",2.4,'tr');E.npcF.mode='cuffed';E.npcE.mode='cuffed';E.npcF.body.add(E.cuffs2);E.npcE.body.add(E.cuffs3);Snd.clang();});
+  add(2.6,()=>{say(FH(),'Mas... e o jatinho?!',2.2);player.mode='cheer';tr().mode='cheer';});
+  add(0.1,()=>Fade.to(1,0.5,()=>{setupJail();Fade.to(0,0.7);}));
+  return L;}
+const SHOTS={two:[[-3.6,2.5,9.2,7.6],[-3.6,1.3,2.6]],wide:[[-3.0,3.3,12.5,10.5],[-3.2,1.6,2.2]],trump:[[-3.0,2.1,5.2,4.9],[-4.55,1.95,2.6]],trumpX:[[-3.35,2.0,4.1,3.9],[-4.55,2.0,2.6]],moraes:[[-3.0,2.1,5.0,4.7],[-4.55,1.9,2.6]],player:[[-4.9,2.1,5.2,4.9],[-3.3,1.95,2.6]],pair:[[-1.1,2.2,6.6,5.8],[-1.1,1.6,1.3]]};
 function endingUpdate(dt){E.t+=dt;const T=E.t,pl=planeObj.root,sk=SKINS[skinIdx],J=JAIL[sk.id];
   if(E.jail){jailUpdate(dt,T,J);updBubbles();return;}
   if(T<4.6){const k=easeOut(clamp(T/4.6,0,1)),yk=clamp(T/3,0,1);pl.position.x=lerp(70,4,k);pl.position.y=lerp(18,1.63,1-Math.pow(1-yk,2));planeObj.s.rotation.x=T<3?0.12:lerp(0.12,0,clamp((T-3)/0.5,0,1));}
@@ -942,12 +1003,14 @@ function endingUpdate(dt){E.t+=dt;const T=E.t,pl=planeObj.root,sk=SKINS[skinIdx]
   if(T>=5.3&&T<7){pr.visible=true;planeObj.slot.visible=false;const k=clamp((T-5.3)/1.7,0,1);pr.position.set(dx,lerp(1.12,0,k),lerp(0.85,2.6,k));pr.rotation.y=Math.PI;animPerson(player,'walk',T,dt);}
   else if(T>=7&&T<7.4){pr.position.set(dx,0,2.6);pr.rotation.y=lerp(Math.PI,Math.PI/2,(T-7)/0.4);animPerson(player,'idle',T,dt);}
   else if(T>=7.4&&T<10.3){pr.rotation.y=Math.PI/2;pr.position.set(lerp(dx,-3.25,clamp((T-7.4)/2.9,0,1)),0,2.6);animPerson(player,'walk',T,dt);}
-  else if(T>=10.3)animPerson(player,E.cuffed?'cuffed':m==='cheer'?'cheer':(m==='unmask'||m==='reveal'||m==='arrest')?'scratch':'idle',T,dt);
-  if(E.trump.root.visible)animPerson(E.trump,m==='cheer'?'cheer':m==='unmask'?'unmask':'idle',T+1,dt);
-  if(E.moraes.root.visible)animPerson(E.moraes,m==='reveal'?'point':'idle',T,dt);
-  if(m==='arrest'){const k=clamp((T-E.arrestT)/1.6,0,1);E.agents.forEach((a,i)=>{a.root.position.x=lerp(-6.6,i?-2.7:-2.2,k);a.root.position.z=lerp(i?1.6:1.0,i?1.4:2.6,k);animPerson(a,k<1?'walk':'idle',T+i,dt);});}
-  else E.agents.forEach((a,i)=>animPerson(a,'idle',T+i,dt));
-  if(m==='cheer'){E.fire-=dt;if(E.fire<=0){E.fire=rand(0.35,0.7);emit(BIG,rand(-25,20),rand(14,24),rand(-40,-20),60,[pick(CONF)],7,1.4,-3);Snd.noise(0.4,0.15,300);}}
+  if(E.happy){if(T>=10.3)updActors(dt,T);else{animPerson(E.trump,'idle',T+1,dt);E.agents.forEach((a,i)=>animPerson(a,'idle',T+i,dt));}}
+  else{
+    if(T>=10.3)animPerson(player,E.cuffed?'cuffed':m==='cheer'?'cheer':(m==='unmask'||m==='reveal'||m==='arrest')?'scratch':'idle',T,dt);
+    if(E.trump.root.visible)animPerson(E.trump,m==='cheer'?'cheer':m==='unmask'?'unmask':'idle',T+1,dt);
+    if(E.moraes.root.visible)animPerson(E.moraes,m==='reveal'?'point':'idle',T,dt);
+    if(m==='arrest'){const k=clamp((T-E.arrestT)/1.6,0,1);E.agents.forEach((a,i)=>{a.root.position.x=lerp(-6.6,i?-2.7:-2.2,k);a.root.position.z=lerp(i?1.6:1.0,i?1.4:2.6,k);animPerson(a,k<1?'walk':'idle',T+i,dt);});}
+    else E.agents.forEach((a,i)=>animPerson(a,'idle',T+i,dt));}
+  if(m==='cheer'||E.fireOn){E.fire-=dt;if(E.fire<=0){E.fire=rand(0.35,0.7);emit(BIG,rand(-25,20),rand(14,24),rand(-40,-20),60,[pick(CONF)],7,1.4,-3);Snd.noise(0.4,0.15,300);}}
   if(m==='unmask')shake=Math.max(shake,0.06);
   E.flags.forEach(f=>flagAnim(f,T));
   for(const s of E.script)if(!s.done&&T>=s.t){s.done=true;s.fn();}
@@ -958,19 +1021,23 @@ function endingUpdate(dt){E.t+=dt;const T=E.t,pl=planeObj.root,sk=SKINS[skinIdx]
   else{const S=SHOTS[E.shot||'two'];E.cp.set(S[0][0],S[0][1],portrait?S[0][2]:S[0][3]);E.cl.set(S[1][0],S[1][1],S[1][2]);E.ck=E.shot==='trump'||E.shot==='trumpX'?0.9:2.2;}
   if(camSnapEnd){camSnapEnd=false;camPos.copy(E.cp);camLook.copy(E.cl);}
   updBubbles();}
-function jailUpdate(dt,T,J){const j=T-E.jt,pr=player.root;
-  if(j<1.9){pr.position.x=lerp(3.3,0.9,clamp(j/1.9,0,1));animPerson(player,'walk',T,dt);}else{pr.rotation.y=lerp(pr.rotation.y,E.faceCam?Math.PI:Math.PI/2+0.6,Math.min(1,dt*4));animPerson(player,'idle',T,dt);}
-  if(E.faceCam)E.mate.root.rotation.y=lerp(E.mate.root.rotation.y,-Math.PI,Math.min(1,dt*4));
-  E.door.position.x=j<2?2.4:lerp(2.4,0,clamp((j-2)/0.35,0,1));
-  once('dc',2.35,()=>{Snd.clang();shake=0.25;});
-  animPerson(E.mate,(j>2.8&&j<5.5)?'scratch':'idle',T+2,dt);
+function spk(w){return ({m:E.mate,p:player,f:E.npcF,e:E.npcE,t:E.trump}[w]||player).head;}
+function jailUpdate(dt,T,J){const j=T-E.jt,pr=player.root,fc=Math.min(1,dt*4);
+  if(E.happy){animPerson(player,E.faceCam?'cheer':'idle',T,dt);animPerson(E.trump,E.faceCam?'cheer':'idle',T+1,dt);
+    animPerson(E.npcF,'idle',T,dt);animPerson(E.npcE,'idle',T+1.5,dt);
+    if(E.faceCam){pr.rotation.y=lerp(pr.rotation.y,Math.PI,fc);E.trump.root.rotation.y=lerp(E.trump.root.rotation.y,Math.PI,fc);E.npcF.root.rotation.y=lerp(E.npcF.root.rotation.y,-Math.PI,fc);E.npcE.root.rotation.y=lerp(E.npcE.root.rotation.y,Math.PI,fc);}}
+  else{
+    if(j<1.9){pr.position.x=lerp(3.3,E.mate?0.9:0,clamp(j/1.9,0,1));animPerson(player,'walk',T,dt);}else{pr.rotation.y=lerp(pr.rotation.y,E.faceCam||!E.mate?Math.PI:Math.PI/2+0.6,fc);animPerson(player,'idle',T,dt);}
+    if(E.mate){if(E.faceCam)E.mate.root.rotation.y=lerp(E.mate.root.rotation.y,-Math.PI,fc);animPerson(E.mate,(j>2.8&&j<5.5)?'scratch':'idle',T+2,dt);}
+    E.door.position.x=j<2?2.4:lerp(2.4,0,clamp((j-2)/0.35,0,1));
+    once('dc',2.35,()=>{Snd.clang();shake=0.25;});}
   for(const s of E.jscript)if(!s.done&&j>=s.t){s.done=true;
-    if(s.fx==='fim'){E.faceCam=true;Snd.sad();banner('FIM','');}
+    if(s.fx==='fim'){E.faceCam=true;if(E.happy)Snd.fanfare();else Snd.sad();banner('FIM','');}
     else if(s.fx==='card')showEndcard();
-    else say(s.w==='m'?E.mate.head:player.head,s.txt,s.d);}
-  E.cp.set(0.3,2.1,portrait?9:7.4);E.cl.set(0.3,state==='endcard'&&portrait?0.5:1.35,0.4);E.ck=1.6;}
-function skipCutscene(){if(state!=='ending')return;Fade.to(1,0.25,()=>{if(!E.jail)setupJail();E.jt=E.t-3;E.jscript.forEach(s=>s.done=true);E.faceCam=true;bubs.forEach(b=>b.el.remove());bubs.length=0;player.root.position.x=0.9;Fade.to(0,0.4);showEndcard();});}
-function showEndcard(){state='endcard';show('btnSkip',false);saveBest();const sk=SKINS[skinIdx];$('endMsg').textContent=JAIL[sk.id].msg;$('eDist').textContent=Math.floor(dist);$('eCoins').textContent=coins;$('eScore').textContent=score();$('eBest').textContent='Recorde: '+best;show('endcard',true);}
+    else say(spk(s.w),s.txt,s.d,s.w==='t'?'tr':'');}
+  jailCam();}
+function skipCutscene(){if(state!=='ending')return;Fade.to(1,0.25,()=>{if(!E.jail)setupJail();E.jt=E.t-3;E.jscript.forEach(s=>s.done=true);E.faceCam=true;bubs.forEach(b=>b.el.remove());bubs.length=0;if(!E.happy)player.root.position.x=E.mate?0.9:0;Fade.to(0,0.4);showEndcard();});}
+function showEndcard(){state='endcard';show('btnSkip',false);saveBest();const sk=SKINS[skinIdx],J=JAIL[sk.id];$('endTitle').innerHTML=J.happy?'FINAL<br>FELIZ!':'TEJE<br>PRESO!';$('endMsg').textContent=J.msg;$('eDist').textContent=Math.floor(dist);$('eCoins').textContent=coins;$('eScore').textContent=score();$('eBest').textContent='Recorde: '+best;show('endcard',true);}
 
 // ---------- camera
 const camPos=new THREE.Vector3(0,1.75,4.9),camLook=new THREE.Vector3(0,1.2,0),tP=new THREE.Vector3(),tL=new THREE.Vector3();
@@ -988,7 +1055,7 @@ function updCamera(dt){let k;
 function animWorld(dt){const bl=Math.floor(t*6)%2;blinkR.color.setHex(bl?0xff2a2a:0x551111);blinkB.color.setHex(bl?0x112255:0x2a6bff);
   for(const c of coinA)c.g.rotation.y=t*4+c.ph;
   for(const p of pickA){p.g.rotation.y=t*2.2;p.g.position.y=p.y+Math.sin(t*3+p.d)*0.15;if(p.g.userData.top)p.g.userData.top.rotation.z=Math.abs(Math.sin(t*5))*0.5;if(p.type==='phone')p.g.userData.p.rotation.z=Math.sin(t*40)*0.08*(Math.sin(t*3)>0?1:0);}
-  for(const o of obsA){const u=o.g.userData;if(u.hint)u.hint.position.y=(o.kind==='low'?2.3:-0.75)+Math.sin(t*6)*0.15;if(u.wings)u.wings.forEach(w=>w.p.rotation.z=w.s*Math.sin(t*14+w.ph)*0.7);if(u.bolt)u.bolt.visible=Math.sin(t*9+o.d)>0.6;}
+  for(const o of obsA){const u=o.g.userData;if(u.rotors)u.rotors.forEach(r=>r.rotation.y=t*28);if(u.hint)u.hint.position.y=(o.kind==='low'?2.3:-0.75)+Math.sin(t*6)*0.15;if(u.wings)u.wings.forEach(w=>w.p.rotation.z=w.s*Math.sin(t*14+w.ph)*0.7);if(u.bolt)u.bolt.visible=Math.sin(t*9+o.d)>0.6;}
   for(const o of propA)if(o.anim)o.anim(o.g,t);
   for(let i=flyA.length-1;i>=0;i--){const f=flyA[i];f.life-=dt;f.vy-=22*dt;f.g.position.x+=f.vx*dt;f.g.position.y+=f.vy*dt;f.g.position.z+=(f.vz+speed)*dt;f.g.rotation.x+=f.rx*dt;f.g.rotation.z+=f.rz*dt;if(f.life<=0){scene.remove(f.g);flyA.splice(i,1);}}
   if(jetLeave>0){jetLeave-=dt;const r=jetObj.root;r.position.y+=dt*8;r.position.z-=dt*30;jetObj.s.rotation.x=0.35;if(jetLeave<=0)r.visible=false;}}
