@@ -1,0 +1,2 @@
+Coloque aqui os audios (mp3) que o jogo toca automaticamente, se existirem:
+ze-gotinha.mp3, chama-meu-pai.mp3, explode-galera.mp3, teje-preso.mp3, boom.mp3, batida.mp3, cela.mp3
